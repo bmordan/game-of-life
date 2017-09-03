@@ -1,0 +1,22 @@
+{
+  "name": "life",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm run bundle && open ./dist/index.html",
+    "bundle": "browserify ./src/main.js -o ./dist/bundle.js",
+    "watch": "npm run bundle && watch 'npm run bundle' ./src",
+    "test": "jest"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "browserify": "^14.4.0",
+    "jest": "^20.0.4",
+    "watch": "^1.0.2"
+  },
+  "dependencies": {
+    "yo-yo": "^1.4.1"
+  }
+}
