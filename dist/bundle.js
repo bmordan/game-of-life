@@ -1320,23 +1320,27 @@ module.exports = class Cell {
 module.exports = function getNeighbours (grid, location) {
   let [x, y] = grid.cells[location].location
 
-  // simple x wrapping
-  if (x < 0) x = grid.columns.length - 1
-  if (x > grid.columns.length - 1) x = 0
+  function wrapMyX (x) {
+    if (x < 0) return grid.columns.length - 1
+    if (x > grid.columns.length - 1) return 0
+    return x
+  }
 
-  // simple y wrapping
-  if (y < 0) x = grid.rows.length - 1
-  if (y > grid.rows.length - 1) y = 0
+  function wrapMyY (x) {
+    if (y < 0) return grid.rows.length - 1
+    if (y > grid.rows.length - 1) return 0
+    return y
+  }
 
   return [
-    [x - 1, y - 1],
-    [x, y - 1],
-    [x + 1, y - 1],
-    [x - 1, y],
-    [x + 1, y],
-    [x - 1, y + 1],
-    [x, y + 1],
-    [x + 1, y + 1]
+    [wrapMyX(x) - 1, wrapMyY(y) - 1],
+    [wrapMyX(x), wrapMyY(y) - 1],
+    [wrapMyX(x) + 1, wrapMyY(y) - 1],
+    [wrapMyX(x) - 1, wrapMyY(y)],
+    [wrapMyX(x) + 1, wrapMyY(y)],
+    [wrapMyX(x) - 1, wrapMyY(y) + 1],
+    [wrapMyX(x), wrapMyY(y) + 1],
+    [wrapMyX(x) + 1, wrapMyY(y) + 1]
   ]
 }
 
@@ -1399,11 +1403,11 @@ const yo = require('yo-yo')
 const grid = seedGrid(new Grid({rows: 100, columns: 100}))
 
 document.addEventListener('DOMContentLoaded', function () {
-  const firstGeneration = generateDOMgrid(grid)
+  const el = generateDOMgrid(grid)
 
-  document.body.appendChild(firstGeneration)
+  document.body.appendChild(el)
 
-  regenerateDOMgrid(grid)
+  regenerateDOMgrid(el, grid)
 })
 
 function generateDOMgrid (grid) {
@@ -1425,18 +1429,16 @@ function generateDOMgrid (grid) {
   }</table>`
 }
 
-function regenerateDOMgrid (grid) {
-  const oldGrid = document.getElementById('grid')
-
+function regenerateDOMgrid (el, grid) {
   const nextGrid = new Grid(grid)
 
   const nextDOMgrid = generateDOMgrid(nextGrid)
 
-  document.body.replaceChild(nextDOMgrid, oldGrid)
+  yo.update(el, nextDOMgrid)
 
   setTimeout(function () {
-    regenerateDOMgrid(nextGrid)
-  }, 1)
+    regenerateDOMgrid(el, nextGrid)
+  }, 50)
 }
 
 },{"./grid":9,"./seed-grid":11,"yo-yo":1}],11:[function(require,module,exports){

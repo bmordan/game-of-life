@@ -5,11 +5,11 @@ const yo = require('yo-yo')
 const grid = seedGrid(new Grid({rows: 100, columns: 100}))
 
 document.addEventListener('DOMContentLoaded', function () {
-  const firstGeneration = generateDOMgrid(grid)
+  const el = generateDOMgrid(grid)
 
-  document.body.appendChild(firstGeneration)
+  document.body.appendChild(el)
 
-  regenerateDOMgrid(grid)
+  regenerateDOMgrid(el, grid)
 })
 
 function generateDOMgrid (grid) {
@@ -31,16 +31,14 @@ function generateDOMgrid (grid) {
   }</table>`
 }
 
-function regenerateDOMgrid (grid) {
-  const oldGrid = document.getElementById('grid')
-
+function regenerateDOMgrid (el, grid) {
   const nextGrid = new Grid(grid)
 
   const nextDOMgrid = generateDOMgrid(nextGrid)
 
-  document.body.replaceChild(nextDOMgrid, oldGrid)
+  yo.update(el, nextDOMgrid)
 
   setTimeout(function () {
-    regenerateDOMgrid(nextGrid)
-  }, 100)
+    regenerateDOMgrid(el, nextGrid)
+  }, 50)
 }
