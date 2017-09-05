@@ -1320,28 +1320,26 @@ module.exports = class Cell {
 module.exports = function getNeighbours (grid, location) {
   let [x, y] = grid.cells[location].location
 
-  function wrapMyX (x) {
-    if (x < 0) return grid.columns.length - 1
-    if (x > grid.columns.length - 1) return 0
-    return x
-  }
+  const neighbours = [
+    [x - 1, y - 1],
+    [x, y - 1],
+    [x + 1, y - 1],
+    [x - 1, y],
+    [x + 1, y],
+    [x - 1, y + 1],
+    [x, y + 1],
+    [x + 1, y + 1]
+  ].map(([x, y]) => {
+    let wrappedX = x
+    let wrappedY = y
+    if (x < 0) wrappedX = grid.columns - 1
+    else if (x === grid.columns) wrappedX = 0
+    if (y < 0) wrappedY = grid.rows - 1
+    else if (y === grid.rows) wrappedY = 0
+    return [wrappedX, wrappedY]
+  })
 
-  function wrapMyY (x) {
-    if (y < 0) return grid.rows.length - 1
-    if (y > grid.rows.length - 1) return 0
-    return y
-  }
-
-  return [
-    [wrapMyX(x) - 1, wrapMyY(y) - 1],
-    [wrapMyX(x), wrapMyY(y) - 1],
-    [wrapMyX(x) + 1, wrapMyY(y) - 1],
-    [wrapMyX(x) - 1, wrapMyY(y)],
-    [wrapMyX(x) + 1, wrapMyY(y)],
-    [wrapMyX(x) - 1, wrapMyY(y) + 1],
-    [wrapMyX(x), wrapMyY(y) + 1],
-    [wrapMyX(x) + 1, wrapMyY(y) + 1]
-  ]
+  return neighbours
 }
 
 },{}],9:[function(require,module,exports){
@@ -1352,7 +1350,7 @@ class Grid {
   constructor (grid) {
     this.rows = grid && grid.rows || 100
     this.columns = grid && grid.columns || 100
-    this.cells = grid.cells ? nextGenerationCells(grid) : generateCells(this.rows, this.columns)
+    this.cells = grid && grid.cells ? nextGenerationCells(grid) : generateCells(this.rows, this.columns)
   }
 
   cellAt (x, y) {

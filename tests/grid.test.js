@@ -21,7 +21,6 @@ describe('Grid', () => {
     })
 
     const nextGenerationCells = new Grid(grid)
-    console.log(nextGenerationCells)
     expect(nextGenerationCells.cellAt(50, 50).lifeStatus).toBe(true)
   })
 })

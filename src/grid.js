@@ -5,7 +5,7 @@ class Grid {
   constructor (grid) {
     this.rows = grid && grid.rows || 100
     this.columns = grid && grid.columns || 100
-    this.cells = grid.cells ? nextGenerationCells(grid) : generateCells(this.rows, this.columns)
+    this.cells = grid && grid.cells ? nextGenerationCells(grid) : generateCells(this.rows, this.columns)
   }
 
   cellAt (x, y) {
